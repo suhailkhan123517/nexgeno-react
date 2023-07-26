@@ -1,0 +1,16 @@
+.cursorP {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(136, 130, 194, 0.2);
+  position: fixed;
+  pointer-events: none;
+  transition: transform 0.1s;
+  z-index: 999999;
+}
+
+@media screen and (max-width: 767px) {
+  .cursorP {
+    display: none;
+  }
+}

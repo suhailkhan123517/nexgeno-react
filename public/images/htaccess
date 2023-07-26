@@ -1,0 +1,104 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-l
+  RewriteRule . /index.html [L]
+</IfModule>
+#Start Nexgeno Directory and wordpress security
+
+#Begin Really Simple Security
+<IfModule mod_rewrite.c>
+RewriteEngine on
+RewriteCond %{HTTP:CF-Visitor} '"scheme":"http"'
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+</IfModule>
+
+ 
+<Files .htaccess>
+Order allow,deny
+Deny from all
+</Files>
+
+Options All -Indexes
+ 
+#Header set Access-Control-Allow-Origin "https://nexgeno.in"
+
+
+ # 6G FIREWALL/BLACKLIST
+# @ https://perishablepress.com/6g/
+
+# 6G:[QUERY STRING]
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteCond %{QUERY_STRING} (eval\() [NC,OR]
+	RewriteCond %{QUERY_STRING} (127\.0\.0\.1) [NC,OR]
+	RewriteCond %{QUERY_STRING} ([a-z0-9]{2000,}) [NC,OR]
+	RewriteCond %{QUERY_STRING} (javascript:)(.*)(;) [NC,OR]
+	RewriteCond %{QUERY_STRING} (base64_encode)(.*)(\() [NC,OR]
+	RewriteCond %{QUERY_STRING} (GLOBALS|REQUEST)(=|\[) [NC,OR]
+	RewriteCond %{QUERY_STRING} (<|%3C)(.*)script(.*)(>|%3) [NC,OR]
+	RewriteCond %{QUERY_STRING} (\\|\.\.\.|\.\./|~|`|<|>|\|) [NC,OR]
+	RewriteCond %{QUERY_STRING} (boot\.ini|etc/passwd|self/environ) [NC,OR]
+	RewriteCond %{QUERY_STRING} (thumbs?(_editor|open)?|tim(thumb)?)\.php [NC,OR]
+	RewriteCond %{QUERY_STRING} (\'|\")(.*)(drop|insert|md5|select|union) [NC]
+	RewriteRule .* - [F]
+</IfModule>
+
+# 6G:[REQUEST METHOD]
+<IfModule mod_rewrite.c>
+	RewriteCond %{REQUEST_METHOD} ^(connect|debug|move|put|trace|track) [NC]
+	RewriteRule .* - [F]
+</IfModule>
+
+# 6G:[REFERRER]
+<IfModule mod_rewrite.c>
+	RewriteCond %{HTTP_REFERER} ([a-z0-9]{2000,}) [NC,OR]
+	RewriteCond %{HTTP_REFERER} (semalt.com|todaperfeita) [NC]
+	RewriteRule .* - [F]
+</IfModule>
+
+# 6G:[USER AGENT]
+<IfModule mod_setenvif.c>
+	SetEnvIfNoCase User-Agent ([a-z0-9]{2000,}) bad_bot
+	SetEnvIfNoCase User-Agent (archive.org|binlar|casper|checkpriv|choppy|clshttp|cmsworld|diavol|dotbot|extract|feedfinder|flicky|g00g1e|harvest|heritrix|httrack|kmccrew|loader|miner|nikto|nutch|planetwork|postrank|purebot|pycurl|python|seekerspider|siclab|skygrid|sqlmap|sucker|turnit|vikspider|winhttp|xxxyy|youda|zmeu|zune) bad_bot
+	
+	# Apache < 2.3
+	<IfModule !mod_authz_core.c>
+		Order Allow,Deny
+		Allow from all
+		Deny from env=bad_bot
+	</IfModule>
+
+	# Apache >= 2.3
+	<IfModule mod_authz_core.c>
+		<RequireAll>
+			Require all Granted
+			Require not env bad_bot
+		</RequireAll>
+	</IfModule>
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header always append X-Frame-Options SAMEORIGIN
+    Header set X-XSS-Protection "1; mode=block"
+    #Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; frame-src 'none'"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "no-referrer-when-downgrade"
+    Header set Feature-Policy "geolocation 'none'; microphone 'none'; camera 'none';"
+    #Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Cross-Origin-Resource-Policy "same-origin" 
+    Header set X-Permitted-Cross-Domain-Policies "none" 
+    Header unset Server
+    Header always set Expect-CT "enforce, max-age=86400"
+</IfModule>
+ #End Nexgeno Directory and wordpress security 
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php81” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddType application/x-httpd-ea-php81 .php .php8 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit

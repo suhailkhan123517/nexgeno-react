@@ -1,0 +1,22 @@
+.tech-container {
+  padding: 2rem;
+  border-radius: 1rem;
+  transition: all 0.3s;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.tech-container_dark {
+  padding: 2rem;
+  border-radius: 1rem;
+  transition: all 0.3s;
+  box-shadow: 0px 5px 10px 0px rgba(0, 255, 255, 0.7);
+}
+
+.tech-container_dark:hover {
+  transform: translateY(-10px);
+  box-shadow: 0px 10px 20px 2px rgba(0, 255, 255, 0.7);
+}
+
+.tech-icon img {
+  width: 100%;
+  margin-bottom: 1rem;
+}
